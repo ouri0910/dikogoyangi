@@ -44,6 +44,120 @@ class mineing(commands.Cog):
         if item in ['광물', 'mineral', 'ㄱㅁ', 'm']:
             await ctx.send(f"```ansi\n[1;37;40m឵이번주 광물 가격\n\n[0;30m឵돌 : {mineral[1]}원\n[0;30m឵석탄 : {mineral[2]}원\n[0;37m឵철 : {mineral[3]}원\n[0;37m឵은 : {mineral[4]}원\n[0;33m឵금 : {mineral[5]}원\n[0;35m឵크리스탈 : {mineral[6]}원\n[0;31m឵루비 : {mineral[7]}원\n[0;32m឵에메랄드 : {mineral[8]}원\n[0;34m사파이어 : {mineral[9]}원\n[0;36m឵다이아몬드 : {mineral[10]}원\n[0;30m឵네더라이트 : {mineral[11]}원\n[0;37;45m឵??? : {mineral[12]}원```")
             return
+    
+    @commands.command(name='buy', aliases=['구매','ㄱㅇ', 'b'])
+    async def buy(self, ctx, item: str = None, amount: int = 1):
+        user = ctx.message.author.name
+        if item is None or item not in ['하급', '일반', '고급', '드릴', 'ㅎㄱ', 'ㅇㅂ', 'ㄱㄱ', 'ㄷㄹ', 'l', 'n', 'h', 'd']:
+            await ctx.send("구매할 도구의 종류와 개수를 입력해야 한다냥! 예: `.구매 하급 1`")
+            return
+        if amount <= 0:
+            await ctx.send("구매할 개수는 1개 이상이어야 한다냥!")
+            return
+        with open('test.csv', 'r', encoding='utf-8') as file:
+            csv_reader = csv.reader(file)
+            rows = list(csv_reader)
+            for row in rows:
+                if len(row) < 2:
+                    continue
+                if row[0] == user:
+                    money = int(row[1])
+                    if item in ['하급', 'ㅎㄱ', 'l']:
+                        cost = 25000 * amount
+                        if money < cost:
+                            await ctx.send(f"{user}님이 하급 곡괭이 {amount}개를 구매하려면 {cost}원이 필요하다냥! 돈을 벌어오라냥!")
+                            return
+                        if money >= cost:
+                            await ctx.send(f"{user}님이 하급 곡괭이 {amount}개를 구매했다냥! {cost}원을 지불했다냥!")
+                            row[1] = str(money - cost)
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('bag.csv', 'r', encoding='utf-8') as bag_file:
+                                bag_reader = csv.reader(bag_file)
+                                bag_rows = list(bag_reader)
+                                for bag_row in bag_rows:
+                                    if len(bag_row) < 2:
+                                        continue
+                                    if bag_row[0] == user:
+                                        bag_row[1] = str(int(bag_row[1]) + amount)
+                                        break
+                            with open('bag.csv', 'w', encoding='utf-8', newline='') as bag_file:
+                                bag_writer = csv.writer(bag_file)
+                                bag_writer.writerows(bag_rows)
+                            break
+                    if item in ['일반', 'ㅇㅂ', 'n']:
+                        cost = 100000 * amount
+                        if money < cost:
+                            await ctx.send(f"{user}님이 일반 곡괭이 {amount}개를 구매하려면 {cost}원이 필요하다냥! 돈을 벌어오라냥!")
+                            return
+                        if money >= cost:
+                            await ctx.send(f"{user}님이 일반 곡괭이 {amount}개를 구매했다냥! {cost}원을 지불했다냥!")
+                            row[1] = str(money - cost)
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('bag.csv', 'r', encoding='utf-8') as bag_file:
+                                bag_reader = csv.reader(bag_file)
+                                bag_rows = list(bag_reader)
+                                for bag_row in bag_rows:
+                                    if len(bag_row) < 3:
+                                        continue
+                                    if bag_row[0] == user:
+                                        bag_row[2] = str(int(bag_row[2]) + amount)
+                                        break
+                            with open('bag.csv', 'w', encoding='utf-8', newline='') as bag_file:
+                                bag_writer = csv.writer(bag_file)
+                                bag_writer.writerows(bag_rows)
+                            break
+                    if item in ['고급', 'ㄱㄱ', 'h']:
+                        cost = 250000 * amount
+                        if money < cost:
+                            await ctx.send(f"{user}님이 고급 곡괭이 {amount}개를 구매하려면 {cost}원이 필요하다냥! 돈을 벌어오라냥!")
+                            return
+                        if money >= cost:
+                            await ctx.send(f"{user}님이 고급 곡괭이 {amount}개를 구매했다냥! {cost}원을 지불했다냥!")
+                            row[1] = str(money - cost)
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('bag.csv', 'r', encoding='utf-8') as bag_file:
+                                bag_reader = csv.reader(bag_file)
+                                bag_rows = list(bag_reader)
+                                for bag_row in bag_rows:
+                                    if len(bag_row) < 4:
+                                        continue
+                                    if bag_row[0] == user:
+                                        bag_row[3] = str(int(bag_row[3]) + amount)
+                                        break
+                            with open('bag.csv', 'w', encoding='utf-8', newline='') as bag_file:
+                                bag_writer = csv.writer(bag_file)
+                                bag_writer.writerows(bag_rows)
+                            break
+                    if item in ['드릴', 'ㄷㄹ', 'd']:
+                        cost = 1000000 * amount
+                        if money < cost:
+                            await ctx.send(f"{user}님이 드릴 {amount}개를 구매하려면 {cost}원이 필요하다냥! 돈을 벌어오라냥!")
+                            return
+                        if money >= cost:
+                            await ctx.send(f"{user}님이 드릴 {amount}개를 구매했다냥! {cost}원을 지불했다냥!")
+                            row[1] = str(money - cost)
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('bag.csv', 'r', encoding='utf-8') as bag_file:
+                                bag_reader = csv.reader(bag_file)
+                                bag_rows = list(bag_reader)
+                                for bag_row in bag_rows:
+                                    if len(bag_row) < 5:
+                                        continue
+                                    if bag_row[0] == user:
+                                        bag_row[4] = str(int(bag_row[4]) + amount)
+                                        break
+                            with open('bag.csv', 'w', encoding='utf-8', newline='') as bag_file:
+                                bag_writer = csv.writer(bag_file)
+                                bag_writer.writerows(bag_rows)
+                            break
 
     @commands.command(name='mining', aliases=['채광','광질','ㄱㅈ','m'])
     async def mining(self, ctx, mine: str = None):
