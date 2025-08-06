@@ -3,7 +3,7 @@ import csv
 import random
 import asyncio
 
-mineral = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]
+mineral = [0, 50000, 75000, 250000, 335000, 650000, 400000, 1250000, 2250000, 5000000, 10000000, 25000000, 5000000000]
 
 class mineing(commands.Cog):
     def __init__(self, bot):
@@ -37,7 +37,7 @@ class mineing(commands.Cog):
         await ctx.send(f"{user}님은 채광 기록이 없다냥!")
 
     @commands.command(name='shop', aliases=['상점', 'ㅅㅈ', 'sh'])
-    async def sell(self, ctx, item: str = None):
+    async def shop(self, ctx, item: str = None):
         if item is None or item not in ['광물', '도구', 'mineral', 'tool', 'ㄱㅁ', 'ㄷㄱ', 'm', 't']:
             await ctx.send("팔거나 살 물건의 종류를 입력해야 한다냥! 예: `.상점 광물`")
             return
@@ -45,6 +45,334 @@ class mineing(commands.Cog):
             await ctx.send(f"```ansi\n[1;37;40m឵이번주 광물 가격\n\n[0;30m឵돌 : {mineral[1]}원\n[0;30m឵석탄 : {mineral[2]}원\n[0;37m឵철 : {mineral[3]}원\n[0;37m឵은 : {mineral[4]}원\n[0;33m឵금 : {mineral[5]}원\n[0;35m឵크리스탈 : {mineral[6]}원\n[0;31m឵루비 : {mineral[7]}원\n[0;32m឵에메랄드 : {mineral[8]}원\n[0;34m사파이어 : {mineral[9]}원\n[0;36m឵다이아몬드 : {mineral[10]}원\n[0;30m឵네더라이트 : {mineral[11]}원\n[0;37;45m឵??? : {mineral[12]}원```")
             return
     
+    @commands.command(name='sell', aliases=['판매', 'ㅍㅁ', 's'])
+    async def sell(self, ctx, item: str = None, amount: int = 1):
+        user = ctx.message.author.name
+        if item is None or item not in ['돌', '석탄', '철', '은', '금', '크리스탈', '루비', '에메랄드', '사파이어', '다이아몬드', '네더라이트', '???', 'ㄷ','ㅅㅌ','ㅊ','ㅇ','ㄱ','ㅋㄽㅌ','ㅋㄹㅅㅌ','ㄼ','ㄹㅂ','ㅇㅁㄹㄷ','ㅅㅍㅇㅇ','ㄷㅇㅇㅁㄷ','ㄴㄷㄹㅇㅌ']:
+            await ctx.send("판매할 광석의 종류와 수량을 입력해야한다냥! 예: `.판매 돌 1`")
+            return
+        if amount <= 0:
+            await ctx.send("판매할 수량은 1개 이상이어야 한다냥!")
+            return
+        with open('mine.csv', 'r', encoding='utf-8') as file:
+            csv_reader = csv.reader(file)
+            rows = list(csv_reader)
+            for row in rows:
+                if row[0] == user:
+                    if item in ['돌', 'ㄷ']:
+                        stone = int(row[1])
+                        if len(row) < 2:
+                            continue
+                        if stone < amount:
+                            await ctx.send("판매할 돌이 지금 가진 돌보다 많다냥!")
+                            return
+                        if stone >= amount:
+                            await ctx.send(f"{user}님이 돌 {amount}개를 판매헀다냥!")
+                            row[1] = stone - amount
+                            with open('mine.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('test.csv', 'r', encoding='utf-8') as file:
+                                money_reader = csv.reader(file)
+                                money_rows = list(money_reader)
+                                for money_row in money_rows:
+                                    if len(money_row) < 2:
+                                        continue
+                                    if money_row[0] == user:
+                                        money_row[1] = mineral[1] * amount + int(money_row[1])
+                                        break
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                money_writer = csv.writer(file)
+                                money_writer.writerows(money_rows)
+                            break
+                    if item in ['석탄', 'ㅅㅌ']:
+                        stone = int(row[2])
+                        if len(row) < 3:
+                            continue
+                        if stone < amount:
+                            await ctx.send("판매할 석탄이 지금 가진 석탄보다 많다냥!")
+                            return
+                        if stone >= amount:
+                            await ctx.send(f"{user}님이 석탄 {amount}개를 판매헀다냥!")
+                            row[2] = stone - amount
+                            with open('mine.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('test.csv', 'r', encoding='utf-8') as file:
+                                money_reader = csv.reader(file)
+                                money_rows = list(money_reader)
+                                for money_row in money_rows:
+                                    if len(money_row) < 2:
+                                        continue
+                                    if money_row[0] == user:
+                                        money_row[1] = mineral[2] * amount + int(money_row[1])
+                                        break
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                money_writer = csv.writer(file)
+                                money_writer.writerows(money_rows)
+                            break
+                    if item in ['철', 'ㅊ']:
+                        stone = int(row[3])
+                        if len(row) < 4:
+                            continue
+                        if stone < amount:
+                            await ctx.send("판매할 철이 지금 가진 철보다 많다냥!")
+                            return
+                        if stone >= amount:
+                            await ctx.send(f"{user}님이 철 {amount}개를 판매헀다냥!")
+                            row[3] = stone - amount
+                            with open('mine.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('test.csv', 'r', encoding='utf-8') as file:
+                                money_reader = csv.reader(file)
+                                money_rows = list(money_reader)
+                                for money_row in money_rows:
+                                    if len(money_row) < 2:
+                                        continue
+                                    if money_row[0] == user:
+                                        money_row[1] = mineral[3] * amount + int(money_row[1])
+                                        break
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                money_writer = csv.writer(file)
+                                money_writer.writerows(money_rows)
+                            break
+                    if item in ['은', 'ㅇ']:
+                        stone = int(row[4])
+                        if len(row) < 5:
+                            continue
+                        if stone < amount:
+                            await ctx.send("판매할 은이 지금 가진 은보다 많다냥!")
+                            return
+                        if stone >= amount:
+                            await ctx.send(f"{user}님이 은 {amount}개를 판매헀다냥!")
+                            row[4] = stone - amount
+                            with open('mine.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('test.csv', 'r', encoding='utf-8') as file:
+                                money_reader = csv.reader(file)
+                                money_rows = list(money_reader)
+                                for money_row in money_rows:
+                                    if len(money_row) < 2:
+                                        continue
+                                    if money_row[0] == user:
+                                        money_row[1] = mineral[4] * amount + int(money_row[1])
+                                        break
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                money_writer = csv.writer(file)
+                                money_writer.writerows(money_rows)
+                            break
+                    if item in ['금', 'ㄱ']:
+                        stone = int(row[5])
+                        if len(row) < 6:
+                            continue
+                        if stone < amount:
+                            await ctx.send("판매할 금이 지금 가진 금보다 많다냥!")
+                            return
+                        if stone >= amount:
+                            await ctx.send(f"{user}님이 금 {amount}개를 판매헀다냥!")
+                            row[5] = stone - amount
+                            with open('mine.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('test.csv', 'r', encoding='utf-8') as file:
+                                money_reader = csv.reader(file)
+                                money_rows = list(money_reader)
+                                for money_row in money_rows:
+                                    if len(money_row) < 2:
+                                        continue
+                                    if money_row[0] == user:
+                                        money_row[1] = mineral[5] * amount + int(money_row[1])
+                                        break
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                money_writer = csv.writer(file)
+                                money_writer.writerows(money_rows)
+                            break
+                    if item in ['크리스탈', 'ㅋㄽㅌ','ㅋㄹㅅㅌ']:
+                        stone = int(row[6])
+                        if len(row) < 7:
+                            continue
+                        if stone < amount:
+                            await ctx.send("판매할 크리스탈이 지금 가진 크리스탈보다 많다냥!")
+                            return
+                        if stone >= amount:
+                            await ctx.send(f"{user}님이 크리스탈 {amount}개를 판매헀다냥!")
+                            row[6] = stone - amount
+                            with open('mine.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('test.csv', 'r', encoding='utf-8') as file:
+                                money_reader = csv.reader(file)
+                                money_rows = list(money_reader)
+                                for money_row in money_rows:
+                                    if len(money_row) < 2:
+                                        continue
+                                    if money_row[0] == user:
+                                        money_row[1] = mineral[6] * amount + int(money_row[1])
+                                        break
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                money_writer = csv.writer(file)
+                                money_writer.writerows(money_rows)
+                            break
+                    if item in ['루비', 'ㄼ','ㄹㅂ']:
+                        stone = int(row[7])
+                        if len(row) < 8:
+                            continue
+                        if stone < amount:
+                            await ctx.send("판매할 루비가 지금 가진 루비보다 많다냥!")
+                            return
+                        if stone >= amount:
+                            await ctx.send(f"{user}님이 루비 {amount}개를 판매헀다냥!")
+                            row[7] = stone - amount
+                            with open('mine.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('test.csv', 'r', encoding='utf-8') as file:
+                                money_reader = csv.reader(file)
+                                money_rows = list(money_reader)
+                                for money_row in money_rows:
+                                    if len(money_row) < 2:
+                                        continue
+                                    if money_row[0] == user:
+                                        money_row[1] = mineral[7] * amount + int(money_row[1])
+                                        break
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                money_writer = csv.writer(file)
+                                money_writer.writerows(money_rows)
+                            break
+                    if item in ['에메랄드', 'ㅇㅁㄹㄷ']:
+                        stone = int(row[8])
+                        if len(row) < 9:
+                            continue
+                        if stone < amount:
+                            await ctx.send("판매할 에메랄드가 지금 가진 에메랄드보다 많다냥!")
+                            return
+                        if stone >= amount:
+                            await ctx.send(f"{user}님이 에메랄드 {amount}개를 판매헀다냥!")
+                            row[8] = stone - amount
+                            with open('mine.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('test.csv', 'r', encoding='utf-8') as file:
+                                money_reader = csv.reader(file)
+                                money_rows = list(money_reader)
+                                for money_row in money_rows:
+                                    if len(money_row) < 2:
+                                        continue
+                                    if money_row[0] == user:
+                                        money_row[1] = mineral[8] * amount + int(money_row[1])
+                                        break
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                money_writer = csv.writer(file)
+                                money_writer.writerows(money_rows)
+                            break
+                    if item in ['사파이어', 'ㅅㅍㅇㅇ']:
+                        stone = int(row[9])
+                        if len(row) < 10:
+                            continue
+                        if stone < amount:
+                            await ctx.send("판매할 사파이어가 지금 가진 보다 많다냥!")
+                            return
+                        if stone >= amount:
+                            await ctx.send(f"{user}님이 사파이어 {amount}개를 판매헀다냥!")
+                            row[9] = stone - amount
+                            with open('mine.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('test.csv', 'r', encoding='utf-8') as file:
+                                money_reader = csv.reader(file)
+                                money_rows = list(money_reader)
+                                for money_row in money_rows:
+                                    if len(money_row) < 2:
+                                        continue
+                                    if money_row[0] == user:
+                                        money_row[1] = mineral[9] * amount + int(money_row[1])
+                                        break
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                money_writer = csv.writer(file)
+                                money_writer.writerows(money_rows)
+                            break
+                    if item in ['다이아몬드', 'ㄷㅇㅇㅁㄷ']:
+                        stone = int(row[10])
+                        if len(row) < 11:
+                            continue
+                        if stone < amount:
+                            await ctx.send("판매할 다이아몬드가 지금 가진 다이아몬드보다 많다냥!")
+                            return
+                        if stone >= amount:
+                            await ctx.send(f"{user}님이 돌 {amount}개를 판매헀다냥!")
+                            row[10] = stone - amount
+                            with open('mine.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('test.csv', 'r', encoding='utf-8') as file:
+                                money_reader = csv.reader(file)
+                                money_rows = list(money_reader)
+                                for money_row in money_rows:
+                                    if len(money_row) < 2:
+                                        continue
+                                    if money_row[0] == user:
+                                        money_row[1] = mineral[10] * amount + int(money_row[1])
+                                        break
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                money_writer = csv.writer(file)
+                                money_writer.writerows(money_rows)
+                            break
+                    if item in ['네더라이트', 'ㄴㄷㄹㅇㅌ']:
+                        stone = int(row[11])
+                        if len(row) < 12:
+                            continue
+                        if stone < amount:
+                            await ctx.send("판매할 네더라이트가 지금 가진 네더라이트보다 많다냥!")
+                            return
+                        if stone >= amount:
+                            await ctx.send(f"{user}님이 네더라이트 {amount}개를 판매헀다냥!")
+                            row[11] = stone - amount
+                            with open('mine.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('test.csv', 'r', encoding='utf-8') as file:
+                                money_reader = csv.reader(file)
+                                money_rows = list(money_reader)
+                                for money_row in money_rows:
+                                    if len(money_row) < 2:
+                                        continue
+                                    if money_row[0] == user:
+                                        money_row[1] = mineral[11] * amount + int(money_row[1])
+                                        break
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                money_writer = csv.writer(file)
+                                money_writer.writerows(money_rows)
+                            break
+                    if item in ['???']:
+                        stone = int(row[12])
+                        if len(row) < 13:
+                            continue
+                        if stone < amount:
+                            await ctx.send("판매할 ???가 지금 가진 ???보다 많다냥!")
+                            return
+                        if stone >= amount:
+                            await ctx.send(f"{user}님이 ??? {amount}개를 판매헀다냥!")
+                            row[12] = stone - amount
+                            with open('mine.csv', 'w', encoding='utf-8', newline='') as file:
+                                csv_writer = csv.writer(file)
+                                csv_writer.writerows(rows)
+                            with open('test.csv', 'r', encoding='utf-8') as file:
+                                money_reader = csv.reader(file)
+                                money_rows = list(money_reader)
+                                for money_row in money_rows:
+                                    if len(money_row) < 2:
+                                        continue
+                                    if money_row[0] == user:
+                                        money_row[1] = mineral[12] * amount + int(money_row[1])
+                                        break
+                            with open('test.csv', 'w', encoding='utf-8', newline='') as file:
+                                money_writer = csv.writer(file)
+                                money_writer.writerows(money_rows)
+                            break
+                        
+
     @commands.command(name='buy', aliases=['구매','ㄱㅇ', 'b'])
     async def buy(self, ctx, item: str = None, amount: int = 1):
         user = ctx.message.author.name
