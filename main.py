@@ -11,9 +11,9 @@ bot = commands.Bot(command_prefix='.', intents=intents, status=discord.Status.id
 
 @bot.event
 async def on_ready():
-    #c = bot.get_channel(1401589532989849712)
-    #if c:
-    #    await c.send("## 고양이 봇이 온라인 상태입니다! <:BoomCat:1401622592540119252>")
+    c = bot.get_channel(1401589532989849712)
+    if c:
+       await c.send("## 고양이 봇이 온라인 상태입니다! <:BoomCat:1401622592540119252>")
     print('- 다음으로 로그인되었습니다.', bot.user.name, bot.user.id, sep='\n -')
     await bot.add_cog(General.Genaral(bot))
     await bot.add_cog(economy.Economy(bot))
